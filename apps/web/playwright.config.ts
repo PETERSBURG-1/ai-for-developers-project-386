@@ -12,13 +12,13 @@ export default defineConfig({
     {
       command: "pnpm --filter @calendar/api dev",
       reuseExistingServer: true,
-      timeout: 60_000,
+      timeout: 120_000,
       url: "http://127.0.0.1:3000/api/health",
     },
     {
       command: "pnpm --filter @calendar/web dev",
       reuseExistingServer: true,
-      timeout: 60_000,
+      timeout: 120_000,
       url: "http://127.0.0.1:5173",
     },
   ],
