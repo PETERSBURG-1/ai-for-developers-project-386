@@ -76,20 +76,66 @@
 
 ## Стек
 
-- Уточняется на шаге выбора стека.
+- TypeScript, Node.js 24, pnpm 12.
+- Контракт: TypeSpec 1.18 → OpenAPI 3.1.
+- Клиент и схемы: `@hey-api/openapi-ts` (SDK, типы, Zod).
+- Бекенд: Fastify 5 + Zod.
+- Фронтенд: Vite 8, React 19, Tailwind CSS 4, shadcn/ui.
+- Тесты: Vitest. Линтер и форматтер: Oxlint + Oxfmt.
+- Окружение и задачи: mise, pitchfork (daemons), hk (Git-хуки).
+- Контейнер: Docker, один образ с API и собранным фронтендом.
 
 ## Установка
 
-<!-- Опишите установку: клонирование, зависимости, переменные окружения -->
+Установите [mise](https://mise.jdx.dev/installing-mise.html), затем:
 
 ```bash
 git clone https://github.com/PETERSBURG-1/ai-for-developers-project-386.git
 cd ai-for-developers-project-386
+mise install
+mise run setup
+mise exec -- hk install --mise
 ```
+
+`mise install` ставит зафиксированные версии Node.js, pnpm и инструментов проверок.
+`mise run setup` устанавливает зависимости, `hk install` — Git-хуки.
 
 ## Использование
 
-<!-- Добавьте примеры запуска и запись asciinema — именно это смотрит работодатель -->
+```bash
+mise run dev
+```
+
+- Приложение: http://localhost:5173
+- API: http://localhost:3000/api/health
+
+Dev-серверы работают как daemons mise:
+
+```bash
+mise daemons status
+mise daemons logs
+mise daemons stop
+```
+
+Проверки:
+
+```bash
+mise run check
+```
+
+Команда запускает генерацию контракта, линтер, проверку типов, тесты и сборку.
+Она же используется в GitHub Actions.
+
+Docker:
+
+```bash
+mise run docker:build
+mise run docker:run
+```
+
+Контейнер слушает http://localhost:3000 и раздаёт собранный фронтенд и API.
+
+Подробности — в [CONTRIBUTING.md](CONTRIBUTING.md) и [AGENTS.md](AGENTS.md).
 
 ---
 

@@ -1,0 +1,70 @@
+min_version = "2026.11.8"
+
+[settings]
+experimental = true
+
+[tools]
+node = "24.14.0"
+pnpm = "12.18.0"
+pitchfork = "2.34.0"
+hk = "2.12.0"
+oxlint = "1.93.0"
+oxfmt = "0.78.0"
+
+[daemons.api]
+run = "pnpm --filter @calendar/api dev"
+ready_port = 3000
+
+[daemons.web]
+run = "pnpm --filter @calendar/web dev"
+ready_port = 5173
+
+[tasks.setup]
+description = "Install project dependencies"
+run = "pnpm install --frozen-lockfile"
+
+[tasks.codegen]
+description = "Regenerate OpenAPI, SDK and Zod schemas from TypeSpec"
+run = ["pnpm --filter @calendar/contract generate", "pnpm --filter @calendar/api-client generate"]
+
+[tasks.lint]
+description = "Run Oxlint and check formatting with Oxfmt"
+run = ["oxlint --deny-warnings .", "oxfmt --check ."]
+
+[tasks.typecheck]
+description = "Type-check every TypeScript package"
+run = "pnpm -r --if-present typecheck"
+
+[tasks.test]
+description = "Run the test suites"
+run = "pnpm -r --if-present test"
+
+[tasks.build]
+description = "Build the frontend and API"
+run = "pnpm -r --if-present build"
+
+[tasks.check]
+description = "Run all checks: codegen, lint, types, tests, build"
+depends = ["codegen"]
+run = ["mise run lint", "mise run typecheck", "mise run test", "mise run build"]
+
+[tasks.fix]
+description = "Apply safe lint and format fixes"
+run = ["oxlint --fix .", "oxfmt --write ."]
+
+[tasks.dev]
+description = "Start the API and web development servers as daemons"
+daemons = ["api", "web"]
+run = "mise daemons status"
+
+[tasks."docker:build"]
+description = "Build the application Docker image"
+run = "docker build -t calendar:local ."
+
+[tasks."docker:run"]
+description = "Run the application Docker image on port 3000"
+run = "docker run --rm --name calendar -p 3000:3000 calendar:local"
+
+[tasks."docker:stop"]
+description = "Stop the application container"
+run = "docker stop calendar"

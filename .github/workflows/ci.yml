@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Install mise and project tools
+        uses: jdx/mise-action@d5574b52816a478f9d4e6529a3f6ff17a8a36785 # v5.2.8
+      - name: Install dependencies
+        run: mise run setup
+      - name: Run all checks
+        run: mise run check
+      - name: Check generated files are committed
+        run: test -z "$(git status --porcelain)"
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Build image
+        run: docker build --tag calendar:ci .
+      - name: Run container and check API
+        run: |
+          docker run --detach --name calendar --publish 3000:3000 calendar:ci
+          curl --retry 30 --retry-delay 1 --retry-connrefused --fail --silent --show-error http://127.0.0.1:3000/api/health
+      - name: Check frontend is served
+        run: curl --fail --silent --show-error http://127.0.0.1:3000/ | grep --quiet "Календарь звонков"
+      - name: Stop container
+        if: always()
+        run: docker rm --force calendar

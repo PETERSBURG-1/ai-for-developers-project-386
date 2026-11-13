@@ -1,0 +1,17 @@
+{
+  "ignorePatterns": [
+    "node_modules/**",
+    "**/dist/**",
+    "**/coverage/**",
+    "packages/contract/openapi/**",
+    "packages/api-client/src/**",
+    "pnpm-lock.yaml",
+    "mise.lock",
+    ".github/workflows/hexlet-check.yml",
+    ".github/workflows/README.md"
+  ],
+  "sortTailwindcss": {
+    "stylesheet": "apps/web/src/index.css",
+    "functions": ["cn", "cva"]
+  }
+}

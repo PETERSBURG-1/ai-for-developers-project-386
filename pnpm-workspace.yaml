@@ -1,0 +1,9 @@
+packages:
+  - apps/*
+  - packages/*
+
+minimumReleaseAgeExclude:
+  - "@fastify/static@10.1.11"
+
+allowBuilds:
+  esbuild: true

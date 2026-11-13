@@ -1,0 +1,21 @@
+{
+  "plugins": ["typescript", "unicorn", "oxc", "react", "jsx-a11y", "vitest"],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2024": true
+  },
+  "categories": {
+    "correctness": "error"
+  },
+  "options": {
+    "denyWarnings": true
+  },
+  "ignorePatterns": [
+    "node_modules/**",
+    "**/dist/**",
+    "**/coverage/**",
+    "packages/contract/openapi/**",
+    "packages/api-client/src/**"
+  ]
+}
