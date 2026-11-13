@@ -1,11 +1,9 @@
-import { existsSync } from "node:fs";
-import { resolve } from "node:path";
-
 import { type HealthResponse, zHealthResponse } from "@calendar/api-client";
-import fastifyStatic from "@fastify/static";
 import Fastify, { type FastifyInstance, type FastifyServerOptions } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
+
+import { registerWebStatic } from "./web-static";
 
 export interface BuildAppOptions {
   logger?: FastifyServerOptions["logger"];
@@ -30,11 +28,7 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
     async (): Promise<HealthResponse> => ({ status: "ok" }),
   );
 
-  if (options.publicDir && existsSync(options.publicDir)) {
-    app.register(fastifyStatic, {
-      root: resolve(options.publicDir),
-    });
-  }
+  registerWebStatic(app, options.publicDir);
 
   return app;
 }

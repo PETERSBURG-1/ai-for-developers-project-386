@@ -1,3 +1,7 @@
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
 import { getHealth } from "@calendar/api-client";
 import type { FastifyInstance } from "fastify";
 import { afterAll, beforeAll, expect, it } from "vitest";
@@ -29,4 +33,26 @@ it("starts and serves the health endpoint described by the contract", async () =
   expect(response?.status).toBe(200);
   expect(error).toBeUndefined();
   expect(data).toEqual({ status: "ok" });
+});
+
+it("serves the SPA shell for client routes when a public dir is provided", async () => {
+  const publicDir = await mkdtemp(join(tmpdir(), "calendar-web-"));
+  const webApp = buildApp({ publicDir });
+
+  try {
+    await writeFile(
+      join(publicDir, "index.html"),
+      "<!doctype html><html><head><title>Calendar</title></head></html>",
+    );
+
+    const page = await webApp.inject({ method: "GET", url: "/book" });
+    expect(page.statusCode).toBe(200);
+    expect(page.body).toContain("<title>Calendar</title>");
+
+    const missingApi = await webApp.inject({ method: "GET", url: "/api/missing" });
+    expect(missingApi.statusCode).toBe(404);
+  } finally {
+    await webApp.close();
+    await rm(publicDir, { recursive: true, force: true });
+  }
 });
