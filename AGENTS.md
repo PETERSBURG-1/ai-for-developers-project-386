@@ -27,3 +27,19 @@
 - TypeScript зафиксирован на 6.0.3: не поднимайте до проверки `mise run codegen`.
 - Не отключайте правила линтера или типов ради зелёного `check`.
 - Перед завершением изменения `mise run check` должен быть зелёным.
+
+## Agent skills
+
+Набор инженерных скиллов — в `.agents/skills`. В OpenCode вызывайте скилл по имени или через `@.agents/skills/<name>/SKILL.md`.
+
+### Issue tracker
+
+GitHub Issues in `PETERSBURG-1/ai-for-developers-project-386`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default five-role vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `GLOSSARY.md` and `docs/adr/`. See `docs/agents/domain.md`.

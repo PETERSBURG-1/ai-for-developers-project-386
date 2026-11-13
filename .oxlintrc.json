@@ -16,6 +16,7 @@
     "**/dist/**",
     "**/coverage/**",
     "packages/contract/openapi/**",
-    "packages/api-client/src/**"
+    "packages/api-client/src/**",
+    ".agents/skills/**"
   ]
 }

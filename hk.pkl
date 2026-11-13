@@ -6,8 +6,12 @@ hooks {
     fix = true
     stash = "git"
     steps {
-      ["oxlint"] = Builtins.ox_lint
-      ["oxfmt"] = Builtins.oxfmt
+      ["oxlint"] = (Builtins.ox_lint) {
+        exclude = List(".agents/**")
+      }
+      ["oxfmt"] = (Builtins.oxfmt) {
+        exclude = List("**/pnpm-lock.yaml", "**/package-lock.json", ".agents/**")
+      }
     }
   }
 

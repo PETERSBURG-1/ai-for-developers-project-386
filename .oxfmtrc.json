@@ -5,6 +5,7 @@
     "**/coverage/**",
     "packages/contract/openapi/**",
     "packages/api-client/src/**",
+    ".agents/skills/**",
     "pnpm-lock.yaml",
     "mise.lock",
     ".github/workflows/hexlet-check.yml",
