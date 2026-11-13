@@ -2,11 +2,143 @@
 
 import * as z from 'zod';
 
+export const zApiError = z.object({
+    code: z.string(),
+    message: z.string(),
+    details: z.array(z.string()).optional()
+});
+
+export const zCreateBookingRequest = z.object({
+    meetingTypeId: z.string(),
+    start: z.iso.datetime(),
+    guestName: z.string().min(1).max(100),
+    guestEmail: z.email().max(254),
+    guestNotes: z.string().max(1000).optional()
+});
+
+export const zCreateMeetingTypeRequest = z.object({
+    id: z.string().min(1).max(64).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+    title: z.string().min(1).max(120),
+    description: z.string().max(2000),
+    durationMinutes: z.int().gte(5).lte(480)
+});
+
+export const zErrorResponse = z.object({
+    error: zApiError
+});
+
 export const zHealthResponse = z.object({
     status: z.enum(['ok'])
+});
+
+export const zMeetingType = z.object({
+    id: z.string().min(1).max(64).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+    title: z.string().min(1).max(120),
+    description: z.string().max(2000),
+    durationMinutes: z.int().gte(5).lte(480)
+});
+
+export const zBooking = z.object({
+    id: z.string(),
+    meetingTypeId: z.string(),
+    meetingType: zMeetingType,
+    start: z.iso.datetime(),
+    end: z.iso.datetime(),
+    guestName: z.string(),
+    guestEmail: z.string(),
+    guestNotes: z.string().optional(),
+    createdAt: z.iso.datetime()
+});
+
+export const zSlot = z.object({
+    start: z.iso.datetime(),
+    end: z.iso.datetime(),
+    available: z.boolean()
+});
+
+export const zAvailabilityDay = z.object({
+    date: z.iso.date(),
+    freeSlotsCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    slots: z.array(zSlot)
+});
+
+export const zAvailabilityResponse = z.object({
+    days: z.array(zAvailabilityDay)
+});
+
+export const zUpdateMeetingTypeRequest = z.object({
+    title: z.string().min(1).max(120),
+    description: z.string().max(2000),
+    durationMinutes: z.int().gte(5).lte(480)
+});
+
+export const zListBookingsQuery = z.object({
+    upcoming: z.boolean().optional()
 });
 
 /**
  * The request has succeeded.
  */
+export const zListBookingsResponse = z.array(zBooking);
+
+export const zCreateBookingBody = zCreateBookingRequest;
+
+/**
+ * The request has succeeded and a new resource has been created as a result.
+ */
+export const zCreateBookingResponse = zBooking;
+
+/**
+ * The request has succeeded.
+ */
 export const zGetHealthResponse = zHealthResponse;
+
+/**
+ * The request has succeeded.
+ */
+export const zListMeetingTypesResponse = z.array(zMeetingType);
+
+export const zCreateMeetingTypeBody = zCreateMeetingTypeRequest;
+
+/**
+ * The request has succeeded and a new resource has been created as a result.
+ */
+export const zCreateMeetingTypeResponse = zMeetingType;
+
+export const zDeleteMeetingTypePath = z.object({
+    meetingTypeId: z.string()
+});
+
+/**
+ * There is no content to send for this request, but the headers may be useful.
+ */
+export const zDeleteMeetingTypeResponse = z.void();
+
+export const zGetMeetingTypePath = z.object({
+    meetingTypeId: z.string()
+});
+
+/**
+ * The request has succeeded.
+ */
+export const zGetMeetingTypeResponse = zMeetingType;
+
+export const zUpdateMeetingTypeBody = zUpdateMeetingTypeRequest;
+
+export const zUpdateMeetingTypePath = z.object({
+    meetingTypeId: z.string()
+});
+
+/**
+ * The request has succeeded.
+ */
+export const zUpdateMeetingTypeResponse = zMeetingType;
+
+export const zGetAvailabilityPath = z.object({
+    meetingTypeId: z.string()
+});
+
+/**
+ * The request has succeeded.
+ */
+export const zGetAvailabilityResponse = zAvailabilityResponse;

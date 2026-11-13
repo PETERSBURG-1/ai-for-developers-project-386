@@ -12,3 +12,6 @@ mise.local.toml
 .DS_Store
 Thumbs.db
 .playwright-mcp/
+test-results/
+playwright-report/
+blob-report/

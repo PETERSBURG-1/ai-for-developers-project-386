@@ -19,7 +19,7 @@ const steps = [
   },
 ];
 
-function HomePage() {
+export function HomePage() {
   return (
     <div>
       <section className="mx-auto w-full max-w-5xl px-6 py-16 md:py-24">
@@ -59,5 +59,3 @@ function HomePage() {
     </div>
   );
 }
-
-export default HomePage;

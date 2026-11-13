@@ -42,6 +42,10 @@ run = "pnpm -r --if-present typecheck"
 description = "Run the test suites"
 run = "pnpm -r --if-present test"
 
+[tasks."test:e2e"]
+description = "Run Playwright browser scenarios against real servers"
+run = "pnpm --filter @calendar/web test:e2e"
+
 [tasks.build]
 description = "Build the frontend and API"
 run = "pnpm -r --if-present build"

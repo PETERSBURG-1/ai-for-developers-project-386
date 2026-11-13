@@ -10,6 +10,7 @@
 - `mise run dev` — поднять API :3000 и web :5173 как daemons; остановка — `mise daemons stop`.
 - `mise run check` — codegen, lint, typecheck, test, build. Обязательна перед завершением изменения.
 - `mise run test`, `mise run lint`, `mise run typecheck`, `mise run codegen` — отдельные задачи.
+- `mise run test:e2e` — браузерный сценарий Playwright с реальными API и web.
 
 Подробные команды и адреса: [CONTRIBUTING.md](CONTRIBUTING.md).
 
