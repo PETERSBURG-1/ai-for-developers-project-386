@@ -67,12 +67,7 @@ jobs:
           version: "2026.11.8"
       - name: Install dependencies
         run: mise run setup
-      - name: Start dev servers
-        run: mise run dev
       - name: Install Playwright browser
         run: pnpm --filter @calendar/web exec playwright install --with-deps chromium
       - name: Run browser scenarios
         run: mise run test:e2e
-      - name: Stop dev servers
-        if: always()
-        run: mise daemons stop
