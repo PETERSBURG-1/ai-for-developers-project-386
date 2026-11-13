@@ -1,8 +1,10 @@
 import "@typespec/http";
 import "@typespec/openapi";
+import "@typespec/json-schema";
 
 using TypeSpec.Http;
 using TypeSpec.OpenAPI;
+using TypeSpec.JsonSchema;
 
 @service(#{ title: "Calendar API" })
 namespace Calendar;
@@ -26,6 +28,7 @@ model MeetingType {
 
   @minValue(5)
   @maxValue(480)
+  @multipleOf(5)
   durationMinutes: int32;
 }
 
@@ -44,6 +47,7 @@ model CreateMeetingTypeRequest {
 
   @minValue(5)
   @maxValue(480)
+  @multipleOf(5)
   durationMinutes: int32;
 }
 
@@ -57,6 +61,7 @@ model UpdateMeetingTypeRequest {
 
   @minValue(5)
   @maxValue(480)
+  @multipleOf(5)
   durationMinutes: int32;
 }
 
@@ -197,5 +202,5 @@ interface Bookings {
 
   @get
   @operationId("listBookings")
-  list(@query upcoming?: boolean): Booking[];
+  list(@query upcoming: boolean): Booking[];
 }

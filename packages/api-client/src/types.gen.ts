@@ -77,8 +77,8 @@ export type UpdateMeetingTypeRequest = {
 export type ListBookingsData = {
     body?: never;
     path?: never;
-    query?: {
-        upcoming?: boolean;
+    query: {
+        upcoming: boolean;
     };
     url: '/api/bookings';
 };

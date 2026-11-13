@@ -73,7 +73,7 @@ export const zUpdateMeetingTypeRequest = z.object({
 });
 
 export const zListBookingsQuery = z.object({
-    upcoming: z.boolean().optional()
+    upcoming: z.boolean()
 });
 
 /**

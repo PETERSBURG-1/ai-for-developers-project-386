@@ -21,7 +21,7 @@ import { z } from "zod";
 import type { Store } from "./store";
 
 const listBookingsQuery = z.object({
-  upcoming: z.coerce.boolean().optional(),
+  upcoming: z.enum(["true", "false"]).transform((value) => value === "true"),
 });
 
 export function registerRoutes(app: FastifyInstance, store: Store): void {
@@ -142,6 +142,6 @@ export function registerRoutes(app: FastifyInstance, store: Store): void {
         },
       },
     },
-    async (request) => store.listBookings(request.query.upcoming ?? false),
+    async (request) => store.listBookings(request.query.upcoming),
   );
 }

@@ -199,5 +199,14 @@ describe("booking API", () => {
       "2026-11-15T06:00:00.000Z",
       "2026-11-16T06:00:00.000Z",
     ]);
+
+    const withoutFlag = await app.inject({ method: "GET", url: "/api/bookings" });
+    expect(withoutFlag.statusCode).toBe(400);
+
+    const falseFlag = await app.inject({ method: "GET", url: "/api/bookings?upcoming=false" });
+    expect(falseFlag.statusCode).toBe(200);
+
+    const invalidFlag = await app.inject({ method: "GET", url: "/api/bookings?upcoming=no" });
+    expect(invalidFlag.statusCode).toBe(400);
   });
 });

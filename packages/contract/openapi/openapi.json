@@ -69,7 +69,7 @@
           {
             "name": "upcoming",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "boolean"
             },
@@ -512,7 +512,8 @@
             "type": "integer",
             "format": "int32",
             "minimum": 5,
-            "maximum": 480
+            "maximum": 480,
+            "multipleOf": 5
           }
         }
       },
@@ -569,7 +570,8 @@
             "type": "integer",
             "format": "int32",
             "minimum": 5,
-            "maximum": 480
+            "maximum": 480,
+            "multipleOf": 5
           }
         }
       },
@@ -615,7 +617,8 @@
             "type": "integer",
             "format": "int32",
             "minimum": 5,
-            "maximum": 480
+            "maximum": 480,
+            "multipleOf": 5
           }
         }
       }

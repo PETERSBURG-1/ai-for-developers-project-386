@@ -21,9 +21,11 @@ test("guest books a slot and owner sees the booking", async ({ page, request }) 
   });
   expect(created.status()).toBe(201);
 
-  await page.goto(`/book/${meetingTypeId}`);
+  await page.goto("/book");
+  await page.locator(`a[href="/book/${meetingTypeId}"]`).click();
   await expect(page.getByRole("heading", { name: meetingTypeTitle })).toBeVisible();
 
+  await page.locator('ul[aria-label="Дни"] button').nth(1).click();
   await page
     .getByRole("button", { name: /Свободно/ })
     .first()
