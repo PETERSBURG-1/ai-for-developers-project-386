@@ -36,12 +36,20 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Build image
         run: docker build --tag calendar:ci .
-      - name: Run container and check API
+      - name: Run container and check it serves the app
         run: |
           docker run --detach --name calendar --publish 3000:3000 calendar:ci
-          curl --retry 30 --retry-delay 1 --retry-connrefused --fail --silent --show-error http://127.0.0.1:3000/api/health
-      - name: Check frontend is served
-        run: curl --fail --silent --show-error http://127.0.0.1:3000/ | grep --quiet "Календарь звонков"
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error http://127.0.0.1:3000/api/health; then
+              break
+            fi
+            if [ "$attempt" -eq 30 ]; then
+              docker logs calendar
+              exit 1
+            fi
+            sleep 1
+          done
+          curl --fail --silent --show-error http://127.0.0.1:3000/ | grep --quiet "Календарь звонков"
       - name: Stop container
         if: always()
         run: docker rm --force calendar
