@@ -8,6 +8,7 @@
     ".agents/skills/**",
     "pnpm-lock.yaml",
     "mise.lock",
+    "CHANGELOG.md",
     ".github/workflows/hexlet-check.yml",
     ".github/workflows/README.md"
   ],
