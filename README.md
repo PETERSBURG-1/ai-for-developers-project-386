@@ -140,23 +140,31 @@ mise run docker:run
 docker run --rm -e PORT=10000 -p 10000:10000 calendar:local
 ```
 
+### Публичный URL
+
+Приложение развёрнуто на Railway:
+
+https://calendar-production-5f3e8aa8.up.railway.app
+
+Проект `calendar-booking-386`, сервис `calendar`. Railway собирает `Dockerfile`
+из ветки `main`; контейнер слушает порт из `PORT`.
+
 ### Деплой
 
-Проектная конфигурация MCP находится в `opencode.json`: сервер Render
-`https://mcp.render.com/mcp` с OAuth. Порядок подключения:
+Проектная конфигурация MCP находится в `opencode.json`: сервер Railway
+`https://mcp.railway.app/mcp` с OAuth. Порядок подключения:
 
-1. Откройте OpenCode и выполните `/mcps`, выберите `render` и пройдите OAuth.
+1. Откройте OpenCode и выполните `/mcps`, выберите `railway` и пройдите OAuth.
    Данные сессии хранятся вне репозитория.
-2. Выберите рабочий workspace Render.
-3. Создайте web service из этого GitHub-репозитория; Render собирает `Dockerfile`.
-   Порт задаётся переменной `PORT`, приложение уже читает её.
-4. Для неинтерактивного варианта можно использовать API-ключ: экспортируйте
-   `RENDER_API_KEY` и добавьте в `opencode.json` заголовок
-   `Authorization: Bearer {env:RENDER_API_KEY}` с `oauth: false`.
-   Реальный ключ в Git не добавляйте.
+2. Создайте проект и сервис из GitHub-репозитория; Railway собирает `Dockerfile`
+   и запускает контейнер с переменной `PORT`.
+3. Если в вашей сети `mcp.railway.com` или `backboard.railway.com` недоступны,
+   используйте alias `mcp.railway.app` и `backboard.railway.app`.
+4. Для неинтерактивного CLI-деплоя можно экспортировать `RAILWAY_TOKEN`
+   (см. `.env.example`). Реальный токен в Git не добавляйте.
 
-Данные хранятся в памяти процесса: после перезапуска контейнера или сервиса
-созданные типы встреч и записи сбрасываются.
+Данные хранятся в памяти процесса: после перезапуска контейнера, сервиса или
+редеплоя созданные типы встреч и записи сбрасываются.
 
 Подробности — в [CONTRIBUTING.md](CONTRIBUTING.md) и [AGENTS.md](AGENTS.md).
 

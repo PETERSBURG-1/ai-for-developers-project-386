@@ -10,6 +10,7 @@ pitchfork = "2.34.0"
 hk = "2.12.0"
 oxlint = "1.93.0"
 gh = "2.104.0"
+railway = "5.74.0"
 
 [env]
 _.path = ["node_modules/.bin"]
