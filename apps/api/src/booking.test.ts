@@ -17,12 +17,16 @@ function setup() {
   return { app: buildApp({ store }), store };
 }
 
-async function createBooking(app: ReturnType<typeof buildApp>, start: string) {
+async function createBooking(
+  app: ReturnType<typeof buildApp>,
+  start: string,
+  meetingTypeId = "intro-15",
+) {
   return app.inject({
     method: "POST",
     url: "/api/bookings",
     payload: {
-      meetingTypeId: "intro-15",
+      meetingTypeId,
       start,
       guestName: "Анна",
       guestEmail: "anna@example.com",
@@ -101,6 +105,37 @@ describe("booking API", () => {
 
     const adjacent = await createBooking(app, "2026-11-15T06:15:00.000Z");
     expect(adjacent.statusCode).toBe(201);
+  });
+
+  it("rejects partial overlap across different meeting types and durations", async () => {
+    const { app } = setup();
+
+    const created = await app.inject({
+      method: "POST",
+      url: "/api/meeting-types",
+      payload: {
+        id: "deep-60",
+        title: "Глубокая встреча",
+        description: "Час на разбор",
+        durationMinutes: 60,
+      },
+    });
+    expect(created.statusCode).toBe(201);
+
+    expect((await createBooking(app, "2026-11-15T07:00:00.000Z", "deep-60")).statusCode).toBe(201);
+
+    const conflict = await createBooking(app, "2026-11-15T07:30:00.000Z", "intro-15");
+    expect(conflict.statusCode).toBe(409);
+    expect(conflict.json().error.code).toBe("slot_taken");
+
+    const availability = await app.inject({
+      method: "GET",
+      url: "/api/meeting-types/intro-15/availability",
+    });
+    const overlappingSlot = availability
+      .json()
+      .days[0].slots.find((slot: { start: string }) => slot.start === "2026-11-15T07:30:00.000Z");
+    expect(overlappingSlot.available).toBe(false);
   });
 
   it("serializes concurrent bookings for the same slot", async () => {
