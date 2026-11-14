@@ -114,23 +114,35 @@ describe("booking API", () => {
       method: "POST",
       url: "/api/meeting-types",
       payload: {
+        id: "standard-30",
+        title: "Стандартная встреча",
+        description: "Тридцать минут",
+        durationMinutes: 30,
+      },
+    });
+    expect(created.statusCode).toBe(201);
+
+    const createdLong = await app.inject({
+      method: "POST",
+      url: "/api/meeting-types",
+      payload: {
         id: "deep-60",
         title: "Глубокая встреча",
         description: "Час на разбор",
         durationMinutes: 60,
       },
     });
-    expect(created.statusCode).toBe(201);
+    expect(createdLong.statusCode).toBe(201);
 
     expect((await createBooking(app, "2026-11-15T07:00:00.000Z", "deep-60")).statusCode).toBe(201);
 
-    const conflict = await createBooking(app, "2026-11-15T07:30:00.000Z", "intro-15");
+    const conflict = await createBooking(app, "2026-11-15T07:30:00.000Z", "standard-30");
     expect(conflict.statusCode).toBe(409);
     expect(conflict.json().error.code).toBe("slot_taken");
 
     const availability = await app.inject({
       method: "GET",
-      url: "/api/meeting-types/intro-15/availability",
+      url: "/api/meeting-types/standard-30/availability",
     });
     const overlappingSlot = availability
       .json()
