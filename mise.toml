@@ -51,9 +51,19 @@ description = "Build the frontend and API"
 run = "pnpm -r --if-present build"
 
 [tasks.check]
-description = "Run all checks: codegen, lint, types, tests, build"
+description = "Run all checks: codegen, lint, types, tests, build, browser E2E"
 depends = ["codegen"]
-run = ["mise run lint", "mise run typecheck", "mise run test", "mise run build"]
+run = [
+  "mise run lint",
+  "mise run typecheck",
+  "mise run test",
+  "mise run build",
+  "mise run test:e2e",
+]
+
+[tasks."setup:e2e"]
+description = "Install the Playwright Chromium browser"
+run = "pnpm --filter @calendar/web exec playwright install chromium"
 
 [tasks.fix]
 description = "Apply safe lint and format fixes"
