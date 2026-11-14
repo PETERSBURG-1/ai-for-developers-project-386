@@ -46,7 +46,7 @@ mise run fix
 mise run test:e2e
 ```
 
-`mise run test:e2e` запускает Playwright с настоящими API и web-сервером. Перед первым запуском установите браузер: `pnpm --filter @calendar/web exec playwright install chromium`.
+`mise run check` включает браузерный E2E. Перед первым запуском установите Chromium: `mise run setup:e2e`.
 
 `mise run check` — та же команда, которую запускает GitHub Actions. Отдельно можно проверить контейнер:
 
@@ -85,3 +85,4 @@ chore: update dependencies
 ```
 
 Допустимые типы: `feat`, `fix`, `chore`, `docs`, `test`, `ci`, `refactor`.
+Если коммит закрывает тикет, добавьте его номер: `feat: ... (#14)`.

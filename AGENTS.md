@@ -8,7 +8,7 @@
 - `mise install` — установить инструменты.
 - `mise run setup` — установить зависимости.
 - `mise run dev` — поднять API :3000 и web :5173 как daemons; остановка — `mise daemons stop`.
-- `mise run check` — codegen, lint, typecheck, test, build. Обязательна перед завершением изменения.
+- `mise run check` — codegen, lint, typecheck, test, build и браузерный E2E. Обязательна перед завершением изменения.
 - `mise run test`, `mise run lint`, `mise run typecheck`, `mise run codegen` — отдельные задачи.
 - `mise run test:e2e` — браузерный сценарий Playwright с реальными API и web.
 
@@ -25,6 +25,7 @@
 
 - Меняйте контракт только в `packages/contract/*.tsp`, затем запускайте `mise run codegen`. Файлы в `packages/contract/openapi/**` и `packages/api-client/src/**` сгенерированы — руками не редактируются.
 - Коммиты — Conventional Commits: `feat:`, `fix:`, `chore:`, `docs:`, `test:`, `ci:`, `refactor:`. Формат проверяет commit-msg hook.
+- Коммит, закрывающий тикет, ссылается на него в сообщении: `feat: ... (#14)`. GitHub превращает номер в ссылку на тикет.
 - TypeScript зафиксирован на 6.0.3: не поднимайте до проверки `mise run codegen`.
 - Не отключайте правила линтера или типов ради зелёного `check`.
 - Перед завершением изменения `mise run check` должен быть зелёным.
