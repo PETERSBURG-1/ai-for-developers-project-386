@@ -133,7 +133,30 @@ mise run docker:build
 mise run docker:run
 ```
 
-Контейнер слушает http://localhost:3000 и раздаёт собранный фронтенд и API.
+Контейнер слушает `PORT` (по умолчанию 3000) и раздаёт собранный фронтенд и API.
+Для нестандартного порта:
+
+```bash
+docker run --rm -e PORT=10000 -p 10000:10000 calendar:local
+```
+
+### Деплой
+
+Проектная конфигурация MCP находится в `opencode.json`: сервер Render
+`https://mcp.render.com/mcp` с OAuth. Порядок подключения:
+
+1. Откройте OpenCode и выполните `/mcps`, выберите `render` и пройдите OAuth.
+   Данные сессии хранятся вне репозитория.
+2. Выберите рабочий workspace Render.
+3. Создайте web service из этого GitHub-репозитория; Render собирает `Dockerfile`.
+   Порт задаётся переменной `PORT`, приложение уже читает её.
+4. Для неинтерактивного варианта можно использовать API-ключ: экспортируйте
+   `RENDER_API_KEY` и добавьте в `opencode.json` заголовок
+   `Authorization: Bearer {env:RENDER_API_KEY}` с `oauth: false`.
+   Реальный ключ в Git не добавляйте.
+
+Данные хранятся в памяти процесса: после перезапуска контейнера или сервиса
+созданные типы встреч и записи сбрасываются.
 
 Подробности — в [CONTRIBUTING.md](CONTRIBUTING.md) и [AGENTS.md](AGENTS.md).
 

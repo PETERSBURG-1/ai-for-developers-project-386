@@ -33,5 +33,5 @@ COPY --from=build /prod/api ./
 COPY --from=build /app/apps/web/dist ./public
 EXPOSE 3000
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "fetch('http://127.0.0.1:3000/api/health').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"
+  CMD node -e "const port = process.env.PORT || '3000'; fetch('http://127.0.0.1:' + port + '/api/health').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"
 CMD ["node_modules/.bin/tsx", "src/server.ts"]
